@@ -1,0 +1,108 @@
+<section class="container mx-auto mt-4 p-4">
+  <h1 class="text-2xl font-bold m-4 p-4">Valores do {{ churrasco.nome }}</h1>
+
+  <h2 class="text-xl font-bold m-4 p-4">Pessoas</h2>
+  <table class="min-w-full bg-white table-fixed mb-4">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b text-left">Descrição</th>
+        <th class="py-2 px-4 border-b text-left">Quantidade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="py-2 px-4 border-b text-left">Adultos</td>
+        <td class="py-2 px-4 border-b text-left">
+          {{ churrasco.quantidade_adultos }}
+        </td>
+      </tr>
+      <tr>
+        <td class="py-2 px-4 border-b text-left">Crianças</td>
+        <td class="py-2 px-4 border-b text-left">
+          {{ churrasco.quantidade_criancas }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="text-xl font-bold m-4 p-4">Carnes</h2>
+  <table class="min-w-full bg-white table-fixed mb-4">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b text-left">Nome</th>
+        <th class="py-2 px-4 border-b text-left">Quantidade</th>
+        <th class="py-2 px-4 border-b text-left">Valor Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (carne of churrasco.carnes; track $index) {
+      <tr>
+        <td class="py-2 px-4 border-b text-left">
+          {{ carne.nome | titlecase }}
+        </td>
+        <td class="py-2 px-4 border-b text-left">
+          {{
+            (churrasco.quantidade_adultos * carne.consumo_medio_adulto_g +
+              churrasco.quantidade_criancas * carne.consumo_medio_crianca_g) /
+              1000
+          }}Kg
+        </td>
+        <td class="py-2 px-4 border-b text-left">
+          {{
+            calculaValorPorProduto(
+              churrasco.quantidade_adultos,
+              churrasco.quantidade_criancas,
+              carne.consumo_medio_adulto_g,
+              carne.consumo_medio_crianca_g,
+              carne.preco_kg
+            ) | currency : "BRL"
+          }}
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <h2 class="text-xl font-bold m-4 p-4">Bebidas</h2>
+  <table class="min-w-full bg-white table-fixed mb-4">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b text-left">Nome</th>
+        <th class="py-2 px-4 border-b text-left">Quantidade</th>
+        <th class="py-2 px-4 border-b text-left">Valor Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (bebida of churrasco.bebidas; track $index) {
+      <tr>
+        <td class="py-2 px-4 border-b text-left">
+          {{ bebida.nome | titlecase }}
+        </td>
+        <td class="py-2 px-4 border-b text-left">
+          {{
+            (churrasco.quantidade_adultos * bebida.consumo_medio_adulto_ml +
+              churrasco.quantidade_criancas * bebida.consumo_medio_crianca_ml) /
+              1000
+          }} litros
+        </td>
+        <td class="py-2 px-4 border-b text-left">
+          {{
+            calculaValorPorProduto(
+              churrasco.quantidade_adultos,
+              churrasco.quantidade_criancas,
+              bebida.consumo_medio_adulto_ml,
+              bebida.consumo_medio_crianca_ml,
+              bebida.preco_unidade
+            ) | currency : "BRL"
+          }}
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <h3 class="flex text-xl font-extrabold m-4 p-4">Valor Total: {{ calculaValorTotal() | currency : "BRL" }}</h3>
+  <div class="flex gap-2">
+    <button mat-flat-button color="primary" (click)="irAoMenu()">Voltar ao menu</button>
+  </div>
+</section>

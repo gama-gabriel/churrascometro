@@ -1,0 +1,13 @@
+<mat-card class="card" appearance="outlined"> 
+    <mat-card-header class="card-header">
+        <mat-card-title>{{ carne.nome | titlecase }} ({{ carne.id }})</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+        <p>Preço por kg: {{ carne.preco_kg | currency : "BRL" }}</p>
+        <p>Consumo médio adulto: {{ carne.consumo_medio_adulto_g }}g</p>
+        <p>Consumo médio crianca: {{ carne.consumo_medio_crianca_g }}g</p>
+    </mat-card-content>
+    <mat-card-footer class="card-footer">
+        <p>Tipo: {{ carne.tipo | titlecase }}</p>
+    </mat-card-footer>
+</mat-card>

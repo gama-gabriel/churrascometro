@@ -1,0 +1,221 @@
+@if (!exibirResultados) {
+  <mat-stepper [linear]="true" #stepper class="w-[640px] mx-auto">
+    <mat-step [stepControl]="pessoasForm" label="Nome e Pessoas">
+      <form [formGroup]="pessoasForm" class="flex flex-col">
+        <mat-form-field>
+          <mat-label>Nome</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="nome"
+            [(ngModel)]="churrasco.nome"
+            placeholder="Digite o nome do churrasco"
+          />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Quantidade de Adultos</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="quantidade_adultos"
+            [(ngModel)]="churrasco.quantidade_adultos"
+            placeholder="Digite a quantidade de adultos"
+          />
+        </mat-form-field>
+
+        <mat-error
+          class="mt-2"
+          *ngIf="
+            pessoasForm.get('quantidade_adultos')?.hasError('required') ||
+            pessoasForm.get('quantidade_adultos')?.hasError('min')
+          "
+        >
+          Pelo menos um adulto é obrigatório
+        </mat-error>
+
+        <mat-form-field>
+          <mat-label>Quantidade de Crianças</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="quantidade_criancas"
+            [(ngModel)]="churrasco.quantidade_criancas"
+            placeholder="Digite a quantidade de crianças"
+          />
+        </mat-form-field>
+
+        <div class="flex justify-end">
+          <button
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            [disabled]="pessoasForm.invalid"
+          >
+            Avançar
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="carnesForm" label="Carnes">
+      <form [formGroup]="carnesForm" class="flex flex-col">
+        @for (carne of carnesLista; track $index) {
+        <mat-checkbox [formControlName]="carne.nome">
+          {{ carne.nome | titlecase }}
+        </mat-checkbox>
+        }
+
+        <div class="flex justify-between py-5">
+          <button mat-flat-button color="accent" matStepperPrevious>
+            Voltar
+          </button>
+          <button
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            [disabled]="carnesForm.invalid"
+          >
+            Avançar
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="bebidasForm" label="Bebidas">
+      <form [formGroup]="bebidasForm" class="flex flex-col">
+        @for (bebida of bebidasLista; track $index) {
+        <mat-checkbox [formControlName]="bebida.nome">
+          {{ bebida.nome | titlecase }}
+        </mat-checkbox>
+        }
+      </form>
+
+      <div class="flex justify-between py-5">
+        <button mat-flat-button color="accent" matStepperPrevious>Voltar</button>
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="calcularECadastrarChurrasco()"
+          matStepperNext
+          [disabled]="bebidasForm.invalid"
+        >
+          Calcular
+        </button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+}
+
+
+@if (exibirResultados) {
+<section class="container mx-auto mt-4 p-4">
+  <h1 class="text-2xl font-bold m-4 p-4">Valores do {{ churrasco.nome }}</h1>
+
+  <h2 class="text-xl font-bold m-4 p-4">Pessoas</h2>
+  <table class="min-w-full bg-white table-fixed mb-4">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b text-left">Descrição</th>
+        <th class="py-2 px-4 border-b text-left">Quantidade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="py-2 px-4 border-b text-left">Adultos</td>
+        <td class="py-2 px-4 border-b text-left">
+          {{ churrasco.quantidade_adultos }}
+        </td>
+      </tr>
+      <tr>
+        <td class="py-2 px-4 border-b text-left">Crianças</td>
+        <td class="py-2 px-4 border-b text-left">
+          {{ churrasco.quantidade_criancas }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="text-xl font-bold m-4 p-4">Carnes</h2>
+  <table class="min-w-full bg-white table-fixed mb-4">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b text-left">Nome</th>
+        <th class="py-2 px-4 border-b text-left">Quantidade</th>
+        <th class="py-2 px-4 border-b text-left">Valor Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (carne of churrasco.carnes; track $index) {
+      <tr>
+        <td class="py-2 px-4 border-b text-left">
+          {{ carne.nome | titlecase }}
+        </td>
+        <td class="py-2 px-4 border-b text-left">
+          {{
+            (churrasco.quantidade_adultos * carne.consumo_medio_adulto_g +
+              churrasco.quantidade_criancas * carne.consumo_medio_crianca_g) /
+              1000
+          }}Kg
+        </td>
+        <td class="py-2 px-4 border-b text-left">
+          {{
+            calculaValorPorProduto(
+              churrasco.quantidade_adultos,
+              churrasco.quantidade_criancas,
+              carne.consumo_medio_adulto_g,
+              carne.consumo_medio_crianca_g,
+              carne.preco_kg
+            ) | currency : "BRL"
+          }}
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <h2 class="text-xl font-bold m-4 p-4">Bebidas</h2>
+  <table class="min-w-full bg-white table-fixed mb-4">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b text-left">Nome</th>
+        <th class="py-2 px-4 border-b text-left">Quantidade</th>
+        <th class="py-2 px-4 border-b text-left">Valor Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (bebida of churrasco.bebidas; track $index) {
+      <tr>
+        <td class="py-2 px-4 border-b text-left">
+          {{ bebida.nome | titlecase }}
+        </td>
+        <td class="py-2 px-4 border-b text-left">
+          {{
+            (churrasco.quantidade_adultos * bebida.consumo_medio_adulto_ml +
+              churrasco.quantidade_criancas * bebida.consumo_medio_crianca_ml) /
+              1000
+          }} litros
+        </td>
+        <td class="py-2 px-4 border-b text-left">
+          {{
+            calculaValorPorProduto(
+              churrasco.quantidade_adultos,
+              churrasco.quantidade_criancas,
+              bebida.consumo_medio_adulto_ml,
+              bebida.consumo_medio_crianca_ml,
+              bebida.preco_unidade
+            ) | currency : "BRL"
+          }}
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <h3 class="flex text-xl font-extrabold m-4 p-4">Valor Total: {{ calculaValorTotal() | currency : "BRL" }}</h3>
+  <div class="flex gap-2">
+    <button mat-flat-button color="primary" (click)="cadastrarNovoChurrasco()">Calcular novo churrasco</button>
+    <button mat-flat-button color="primary" (click)="irAoMenu()">Voltar ao menu</button>
+  </div>
+</section>
+}

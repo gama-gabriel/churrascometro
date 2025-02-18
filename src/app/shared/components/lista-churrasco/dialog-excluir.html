@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Excluir churrasco</h2>
+<mat-dialog-content>
+  Tem certeza que deseja excluir o {{data.churrasco.nome}}?
+</mat-dialog-content>
+<mat-dialog-actions class="flex w-full">
+  <div class="flex w-full justify-end px-4">
+  <button mat-button mat-dialog-close>Não</button>
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="excluirProduto(data.churrasco)">Sim</button>
+  </div>
+</mat-dialog-actions>

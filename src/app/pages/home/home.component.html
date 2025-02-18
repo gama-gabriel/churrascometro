@@ -1,0 +1,13 @@
+<div class="text-center">
+    <h1 class="p-6 m-6 text-3xl font-bold">Bem-vindo!</h1>
+
+    <button mat-raised-button class="m-6" color="primary" routerLink="/churrascos/cadastro">Calcular churrasco</button>
+
+    <button mat-raised-button class="m-6" color="primary" routerLink="/churrascos">Lista de churrascos</button>
+
+    <button mat-raised-button class="m-6" color="primary" routerLink="/produtos">Lista de produtos</button>
+
+    <button mat-raised-button class="m-6" color="primary" (click)="goToCadastroProduto('carnes')">Cadastrar nova carne</button>
+
+    <button mat-raised-button class="m-6" color="primary" (click)="goToCadastroProduto('bebidas')">Cadastrar nova bebida</button>
+</div>

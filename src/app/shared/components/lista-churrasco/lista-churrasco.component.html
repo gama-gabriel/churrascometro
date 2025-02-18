@@ -1,0 +1,45 @@
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Quantidade de Adultos</th>
+        <th>Quantidade de Crianças</th>
+        <th>Preço Total</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (churrasco of churrascos; track $index) {
+      <tr>
+        <td>{{ churrasco.id }}</td>
+        <td>{{ churrasco.nome | titlecase }}</td>
+        <td>{{ churrasco.quantidade_adultos }}</td>
+        <td>{{ churrasco.quantidade_criancas }}</td>
+        <td>{{ calculaValorTotal(churrasco) | currency: 'BRL'  }}</td>
+        <td>
+          <button mat-raised-button class="flex gap-2 p-2 items-center text-center text-" color="accent" (click)="goToDetalhesChurrasco(churrasco)">
+              <mat-icon aria-hidden="false" fontIcon="info" class="text-neutral-400 size-1"></mat-icon>
+              Detalhes
+          </button>
+        </td>
+        <td>
+          <button mat-raised-button class="flex gap-2 p-2 items-center text-center text-" color="accent" (click)="goToEditarChurrasco(churrasco)">
+              <mat-icon aria-hidden="false" fontIcon="edit" class="text-neutral-400 size-1"></mat-icon>
+              Editar
+          </button>
+        </td>
+        <td>
+            <button mat-raised-button class="flex gap-2 p-2 items-center text-center text-" color="accent" (click)="openDialog(churrasco)">
+                <mat-icon aria-hidden="false" fontIcon="delete" class="text-neutral-400 size-1"></mat-icon>
+                Excluir
+            </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

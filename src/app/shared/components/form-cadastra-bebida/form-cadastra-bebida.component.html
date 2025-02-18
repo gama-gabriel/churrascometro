@@ -1,0 +1,49 @@
+<h1 class="title">{{ id ? 'Formulário de Edição de Bebida' : 'Formulário de Cadastro de Bebida'}}</h1>
+
+<form class="form" [formGroup]="bebidaForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input matInput 
+            type="text" 
+            formControlName="nome" />
+        <mat-error *ngIf="bebidaForm.get('nome')?.hasError('required')">O nome é obrigatório</mat-error>
+        <mat-error *ngIf="bebidaForm.get('nome')?.hasError('minlength')">O nome deve ter pelo menos 3 caracteres</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="tipo">
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo | titlecase }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="bebidaForm.get('tipo')?.hasError('required')">O tipo é obrigatório</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Preço por unidade</mat-label>
+        <input matInput 
+            type="number" 
+            formControlName="preco_unidade" />
+        <mat-error *ngIf="bebidaForm.get('preco_unidade')?.hasError('required')">O preço é obrigatório</mat-error>
+        <mat-error *ngIf="bebidaForm.get('preco_unidade')?.hasError('precoMinimo')">O preço precisa ser maior ou igual a {{ bebidaForm.get('preco_unidade')?.getError('precoMinimo')['valorMinimo'] }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Consumo Médio Adulto (ml)</mat-label>
+        <input matInput 
+            type="number" 
+            formControlName="consumo_medio_adulto_ml" />
+        <mat-error *ngIf="bebidaForm.get('consumo_medio_adulto_ml')?.hasError('required')">O consumo médio adulto é obrigatório</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Consumo Médio Crianca (ml)</mat-label>
+        <input matInput 
+            type="number" 
+            formControlName="consumo_medio_crianca_ml" />
+        <mat-error *ngIf="bebidaForm.get('consumo_medio_crianca_ml')?.hasError('required')">O consumo médio criança é obrigatório</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button color="accent" type="submit" disabled="{{ bebidaForm.invalid }}">
+        {{ id ? 'Editar bebida' : 'Cadastrar nova bebida'}}
+    </button>
+</form>

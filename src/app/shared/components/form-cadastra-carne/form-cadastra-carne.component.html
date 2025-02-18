@@ -1,0 +1,109 @@
+<h1 class="title">{{ id ? 'Formulário de Edição de Carne' : 'Formulário de Cadastro de Carne' }}</h1>
+
+<form class="form" #carneForm="ngForm" (ngSubmit)="onSubmit(carneForm)">
+  <mat-form-field>
+    <mat-label>Nome</mat-label>
+    <input
+      matInput
+      type="text"
+      name="nome"
+      id="nome"
+      required
+      minlength="3"
+      [(ngModel)]="carne.nome"
+      #nomeInput="ngModel"
+    />
+    @if(nomeInput.invalid && (nomeInput.dirty || nomeInput.touched)) {
+    <mat-error *ngIf="nomeInput.errors?.['required']"
+      >O nome é obrigatório</mat-error
+    >
+    <mat-error *ngIf="nomeInput.errors?.['minlength']"
+      >O nome deve ter pelo menos 3 caracteres</mat-error
+    >
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Tipo</mat-label>
+    <mat-select
+      id="tipo"
+      name="tipo"
+      [(ngModel)]="carne.tipo"
+      required
+      #tipoInput="ngModel"
+    >
+      <mat-option *ngFor="let tipo of tipos" [value]="tipo">{{
+        tipo | titlecase
+      }}</mat-option>
+    </mat-select>
+
+    <div *ngIf="tipoInput.invalid && (tipoInput.dirty || tipoInput.touched)">
+      <mat-error *ngIf="tipoInput.errors?.['required']"
+        >O tipo é obrigatório</mat-error
+      >
+    </div>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Preço por kg</mat-label>
+    <input
+      matInput
+      type="number"
+      name="preco_kg"
+      id="preco_kg"
+      [(ngModel)]="carne.preco_kg"
+      required
+      appPrecoMinimo
+      [precoMinimo]="20"
+      #precoInput="ngModel"
+    />
+    <div *ngIf="precoInput.invalid && (precoInput.dirty || precoInput.touched)">
+      <mat-error *ngIf="precoInput.errors?.['required']"
+        >O preço é obrigatório</mat-error
+      >
+      <mat-error *ngIf="precoInput.errors?.['precoMinimo']"
+        >O preço deve ser maior ou igual a 20</mat-error
+      >
+    </div>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Consumo Médio Adulto (g)</mat-label>
+    <input
+      matInput
+      type="number"
+      name="consumo_medio_adulto_g"
+      id="consumo_medio_adulto_g"
+      [(ngModel)]="carne.consumo_medio_adulto_g"
+      required=""
+      #consumoMedioAdultoInput="ngModel"
+    />
+    <div *ngIf="consumoMedioAdultoInput.invalid && (consumoMedioAdultoInput.dirty || consumoMedioAdultoInput.touched)">
+      <mat-error *ngIf="consumoMedioAdultoInput.errors?.['required']">
+        O consumo médio adulto é obrigatório
+    </mat-error>
+    </div>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Consumo Médio Crianca (g)</mat-label>
+    <input
+      matInput
+      type="number"
+      name="consumo_medio_crianca_g"
+      id="consumo_medio_crianca_g"
+      [(ngModel)]="carne.consumo_medio_crianca_g"
+      required
+      #consumoMedioCriancaInput="ngModel"
+    />
+    <div *ngIf="consumoMedioCriancaInput.invalid && (consumoMedioCriancaInput.dirty || consumoMedioCriancaInput.touched)">
+      <mat-error *ngIf="consumoMedioCriancaInput.errors?.['required']">
+        O consumo médio criança é obrigatório
+    </mat-error>
+    </div>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" type="submit" id="submitButton" [disabled]="carneForm.invalid">
+    {{ id ? 'Editar carne' : 'Cadastrar nova carne'}}
+  </button>
+</form>

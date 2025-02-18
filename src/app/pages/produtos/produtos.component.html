@@ -1,0 +1,18 @@
+<div class="flex items-center justify-center gap-1">
+    <h1 class="pt-6 text-3xl font-bold m-0">Lista de Carnes</h1>
+</div>
+<app-lista-produto tipo="carnes" />
+
+<div class="flex w-full justify-center pb-8">
+    <button mat-raised-button color="accent" (click)="goToCadastraProduto('carnes')">Adicionar carne</button>
+</div>
+
+
+<div class="flex items-center justify-center gap-4">
+    <h1 class="pt-6 text-3xl font-bold">Lista de Bebidas</h1>
+</div>
+<app-lista-produto tipo="bebidas" />
+
+<div class="flex w-full justify-center pb-8">
+    <button mat-raised-button color="accent" (click)="goToCadastraProduto('bebidas')">Adicionar bebida</button>
+</div>

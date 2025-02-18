@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Excluir produto</h2>
+<mat-dialog-content>
+  @if (data.tipo === "carnes") {
+    Tem certeza que deseja excluir a carne {{data.produto.nome}}?
+  }
+  @if (data.tipo === "bebidas") {
+    Tem certeza que deseja excluir a bebida {{data.produto.nome}}?
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Não</button>
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="excluirProduto(data.tipo, data.produto)">Sim</button>
+</mat-dialog-actions>
